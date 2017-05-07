@@ -215,7 +215,9 @@ class Account < ApplicationRecord
   end
 
   def excluded_from_timeline_account_ids
-    Rails.cache.fetch("exclude_account_ids_for:#{id}") { blocking.pluck(:target_account_id) + blocked_by.pluck(:account_id) + muting.pluck(:target_account_id) }
+    Rails.cache.fetch("exclude_account_ids_for:#{id}") do
+      blocking.pluck(:target_account_id) + blocked_by.pluck(:account_id) + muting.pluck(:target_account_id)
+    end
   end
 
   class << self
